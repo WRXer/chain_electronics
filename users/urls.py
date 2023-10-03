@@ -13,4 +13,6 @@ users_router.register("users", UserViewSet, basename="users")    #в роуте 
 urlpatterns = [
     path("", include(users_router.urls)),
 
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     ]
