@@ -6,3 +6,5 @@ from products.models import Product
 @admin.register(Product)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('name', 'model', 'release_date', 'author', 'supplier', 'is_active')
+
+
