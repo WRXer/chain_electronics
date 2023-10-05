@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 
+from products.admin_filters import SupplierCityFilter, PartnerCityFilter
 from products.models import Partner
 from supply.models import Supply
 
@@ -13,8 +14,9 @@ class PartnerAdmin(admin.ModelAdmin):
 
 @admin.register(Supply)
 class SupplyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'partner', 'supplier_link', 'supplier_country', 'get_products_list', 'debt_to_supplier', 'release_date', 'is_active')
-    readonly_fields = ('supplier_email', 'supplier_country')    #Добавляем readonly поля
+    list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'get_products_list', 'debt_to_supplier', 'release_date', 'is_active')
+    readonly_fields = ('supplier_email', 'supplier_city')    #Добавляем readonly поля
+    list_filter = (SupplierCityFilter, PartnerCityFilter)    #Фильтр по городу
 
     def supplier_link(self, obj):
         return obj.supplier.name
@@ -28,10 +30,16 @@ class SupplyAdmin(admin.ModelAdmin):
     def supplier_email(self, obj):
         return obj.supplier.email
 
-    def supplier_country(self, obj):
-        return obj.supplier.country
+    def supplier_city(self, obj):
+        return obj.supplier.city
+
+    def partner_city(self,obj):
+        return obj.partner.city
 
     raw_id_fields = ('supplier',)
+    partner_city.short_description = 'Город организации'
     supplier_email.short_description = 'Email поставщика'    #Название колонки
-    supplier_country.short_description = 'Страна поставщика'
+    supplier_city.short_description = 'Город поставщика'
     get_products_list.short_description = 'Products'
+
+
