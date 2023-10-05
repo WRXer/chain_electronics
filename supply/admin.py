@@ -13,8 +13,14 @@ class PartnerAdmin(admin.ModelAdmin):
 
 @admin.register(Supply)
 class SupplyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'partner', 'supplier', 'supplier_country', 'get_products_list', 'debt_to_supplier', 'release_date', 'is_active')
+    list_display = ('id', 'partner', 'supplier_link', 'supplier_country', 'get_products_list', 'debt_to_supplier', 'release_date', 'is_active')
     readonly_fields = ('supplier_email', 'supplier_country')    #Добавляем readonly поля
+
+    def supplier_link(self, obj):
+        return obj.supplier.name
+
+    supplier_link.short_description = 'Поставщик'
+    supplier_link.admin_order_field = 'supplier__name'
 
     def get_products_list(self, obj):
         return ', '.join([product.name for product in obj.products.all()])
@@ -25,6 +31,7 @@ class SupplyAdmin(admin.ModelAdmin):
     def supplier_country(self, obj):
         return obj.supplier.country
 
+    raw_id_fields = ('supplier',)
     supplier_email.short_description = 'Email поставщика'    #Название колонки
     supplier_country.short_description = 'Страна поставщика'
     get_products_list.short_description = 'Products'
