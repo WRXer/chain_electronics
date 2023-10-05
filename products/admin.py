@@ -5,4 +5,4 @@ from products.models import Product
 # Register your models here.
 @admin.register(Product)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('name', 'model', 'release_date', 'author', 'is_active')
+    list_display = ('name', 'model', 'release_date', 'author', 'supplier', 'is_active')
