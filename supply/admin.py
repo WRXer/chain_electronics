@@ -14,7 +14,7 @@ class PartnerAdmin(admin.ModelAdmin):
 
 @admin.register(Supply)
 class SupplyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'get_products_list', 'debt_to_supplier', 'release_date', 'is_active')
+    list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'get_products_list', 'debt_to_supplier', 'release_datetime', 'is_active')
     readonly_fields = ('supplier_email', 'supplier_city')    #Добавляем readonly поля
     list_filter = (SupplierCityFilter, PartnerCityFilter)    #Фильтр по городу
 

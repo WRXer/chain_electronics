@@ -40,7 +40,7 @@ class Supply(models.Model):
     supplier = models.ForeignKey('Partner', on_delete=models.CASCADE,related_name='supplier', verbose_name='Поставщик')
     products = models.ManyToManyField('products.Product', related_name='products', blank=True, verbose_name='Продукты')
     debt_to_supplier = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Задолженность перед поставщиком')
-    release_date = models.DateField(auto_now_add=True, verbose_name='Дата создания заявки')
+    release_datetime = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время создания заявки', null=True)
     is_active = models.BooleanField(default=True, verbose_name='Активность заявки')
 
     def __str__(self):
