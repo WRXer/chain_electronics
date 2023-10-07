@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+
+from .filters import SupplyFilter
 from .models import Supply, Partner
 from .permissions import CustomAccessPermission
 from .serializers import SupplySerializer, PartnerSerializer
@@ -11,7 +13,8 @@ class SupplyViewSet(viewsets.ModelViewSet):
     """
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
-    permission_classes = [CustomAccessPermission]
+    permission_classes = [CustomAccessPermission]    #доступ
+    filter_class = SupplyFilter    #фильтрация
 
 
 class PartnerViewSet(viewsets.ModelViewSet):
