@@ -10,6 +10,7 @@ class SupplySerializer(serializers.ModelSerializer):
         model = Supply
         fields = '__all__'
 
+
 class PartnerSerializer(serializers.ModelSerializer):
     """
     Сериализатор организации
