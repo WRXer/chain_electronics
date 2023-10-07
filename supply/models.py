@@ -36,7 +36,7 @@ class Supply(models.Model):
     """
     Поставка
     """
-    partner = models.ForeignKey('Partner', on_delete=models.CASCADE, related_name='partner', verbose_name='Организация')
+    partner = models.ForeignKey('Partner', on_delete=models.CASCADE, limit_choices_to={'node_type__in': ['ИП', 'Розничная сеть']}, related_name='partner', verbose_name='Организация')
     supplier = models.ForeignKey('Partner', on_delete=models.CASCADE,related_name='supplier', verbose_name='Поставщик')
     products = models.ManyToManyField('products.Product', related_name='products', blank=True, verbose_name='Продукты')
     debt_to_supplier = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Задолженность перед поставщиком')

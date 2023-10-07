@@ -14,7 +14,7 @@ class Product(models.Model):
     release_date = models.DateField(auto_now_add=True, verbose_name='Дата выхода продукта')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Автор', null=True)
     is_active = models.BooleanField(default=True, verbose_name='Активация продукта')
-    manufacturer = models.ForeignKey(Partner, on_delete=models.CASCADE, verbose_name='Организация производитель', null=True)
+    manufacturer = models.ForeignKey(Partner, on_delete=models.CASCADE, limit_choices_to={'node_type': 'Завод'}, verbose_name='Организация производитель', null=True)
 
     def __str__(self):
         return self.name
