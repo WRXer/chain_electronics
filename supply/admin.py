@@ -37,18 +37,15 @@ class SupplyAdmin(admin.ModelAdmin):
     def partner_city(self,obj):
         return obj.partner.city
 
-
-
     def clear_debt(self, request, queryset):
-        # queryset - это выбранные объекты
+        """Функция очистки задолженности"""
         for network_object in queryset:
             network_object.debt_to_supplier = 0
             network_object.save()
-
         self.message_user(request, f'Задолженность перед поставщиком у выбранных объектов очищена.')
 
-    clear_debt.short_description = 'Очистить задолженность перед поставщиком'
 
+    clear_debt.short_description = 'Очистить задолженность перед поставщиком'
     raw_id_fields = ('supplier',)
     partner_city.short_description = 'Город организации'
     supplier_email.short_description = 'Email поставщика'    #Название колонки
