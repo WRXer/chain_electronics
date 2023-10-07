@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from supply.permissions import CustomAccessPermission
 from .models import Product
 from .serializers import ProductSerializer
 
@@ -6,6 +7,7 @@ from .serializers import ProductSerializer
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [CustomAccessPermission]
 
     def perform_create(self, serializer):
         """

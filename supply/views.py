@@ -1,8 +1,6 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-
 from .models import Supply, Partner
+from .permissions import CustomAccessPermission
 from .serializers import SupplySerializer, PartnerSerializer
 
 
@@ -13,6 +11,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
     """
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
+    permission_classes = [CustomAccessPermission]
 
 
 class PartnerViewSet(viewsets.ModelViewSet):
@@ -21,3 +20,4 @@ class PartnerViewSet(viewsets.ModelViewSet):
     """
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
+    permission_classes = [CustomAccessPermission]
