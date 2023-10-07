@@ -14,19 +14,13 @@ class PartnerAdmin(admin.ModelAdmin):
 
 @admin.register(Supply)
 class SupplyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'get_products_list', 'debt_to_supplier', 'release_datetime', 'is_active')
+    list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'product', 'debt_to_supplier', 'release_datetime', 'is_active')
     readonly_fields = ('supplier_email', 'supplier_city')    #Добавляем readonly поля
     list_filter = (SupplierCityFilter, PartnerCityFilter)    #Фильтр по городу
     actions = ['clear_debt']
 
     def supplier_link(self, obj):
         return obj.supplier.name
-
-    supplier_link.short_description = 'Поставщик'
-    supplier_link.admin_order_field = 'supplier__name'
-
-    def get_products_list(self, obj):
-        return ', '.join([product.name for product in obj.products.all()])
 
     def supplier_email(self, obj):
         return obj.supplier.email
@@ -44,12 +38,20 @@ class SupplyAdmin(admin.ModelAdmin):
             network_object.save()
         self.message_user(request, f'Задолженность перед поставщиком у выбранных объектов очищена.')
 
+    def save_model(self, request, obj, form, change):
+        # Проверяем, совпадает ли организация производитель с заданной в продукте
+        if obj.supplier != obj.product.manufacturer:
+            raise Exception("Организация производитель не совпадает с заданной в продукте!")
 
+        super().save_model(request, obj, form, change)
+
+    supplier_link.short_description = 'Поставщик'
+    supplier_link.admin_order_field = 'supplier__name'
     clear_debt.short_description = 'Очистить задолженность перед поставщиком'
     raw_id_fields = ('supplier',)
     partner_city.short_description = 'Город организации'
     supplier_email.short_description = 'Email поставщика'    #Название колонки
     supplier_city.short_description = 'Город поставщика'
-    get_products_list.short_description = 'Products'
+
 
 
