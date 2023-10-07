@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Supply, Partner
+from .validators import SupplierValidator
 
 
 class SupplySerializer(serializers.ModelSerializer):
@@ -9,6 +10,7 @@ class SupplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Supply
         fields = '__all__'
+        validators = [SupplierValidator()]
 
     def create(self, validated_data):
         validated_data['is_active'] = True  # Устанавливаем is_active в явное значение
