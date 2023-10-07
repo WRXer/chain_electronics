@@ -7,11 +7,11 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['name', 'model', 'manufacturer']
 
-    def validate(self, data):
+
+    def validate_manufacturer(self, value):
         """
-        Валидация продукта
+        Проверяем, является ли организация заводом
         """
-        node_type = self.context.get('request').data.get('node_type')    #Получаем тип звена организации из переданного запроса (если это доступно)
-        if node_type != 'Завод':    #Проверяем, является ли организация заводом
+        if value.node_type != 'Завод':
             raise serializers.ValidationError("Только заводы могут создавать продукты.")
-        return data
+        return value

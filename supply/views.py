@@ -12,6 +12,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
 
+
 class PartnerViewSet(viewsets.ModelViewSet):
     """
     API endpoint для работы с партнерами.
