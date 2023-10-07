@@ -12,8 +12,25 @@ class PartnerAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'country', 'city', 'node_type', 'is_active')
 
 
+class SupplyAdminForm(forms.ModelForm):
+    class Meta:
+        model = Supply
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        supplier = cleaned_data.get('supplier')
+        product = cleaned_data.get('product')
+        if supplier.node_type == 'Завод':    #Проверяем, что организация-производитель совпадает с организацией в продукте
+            if supplier != product.manufacturer:
+                raise forms.ValidationError(
+                    "Организация-производитель в заявке должна совпадать с организацией в продукте.")
+        return cleaned_data
+
+
 @admin.register(Supply)
 class SupplyAdmin(admin.ModelAdmin):
+    form = SupplyAdminForm
     list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'product', 'debt_to_supplier', 'release_datetime', 'is_active')
     readonly_fields = ('supplier_email', 'supplier_city')    #Добавляем readonly поля
     list_filter = (SupplierCityFilter, PartnerCityFilter)    #Фильтр по городу
@@ -37,13 +54,6 @@ class SupplyAdmin(admin.ModelAdmin):
             network_object.debt_to_supplier = 0
             network_object.save()
         self.message_user(request, f'Задолженность перед поставщиком у выбранных объектов очищена.')
-
-    def save_model(self, request, obj, form, change):
-        # Проверяем, совпадает ли организация производитель с заданной в продукте
-        if obj.supplier != obj.product.manufacturer:
-            raise Exception("Организация производитель не совпадает с заданной в продукте!")
-
-        super().save_model(request, obj, form, change)
 
     supplier_link.short_description = 'Поставщик'
     supplier_link.admin_order_field = 'supplier__name'
