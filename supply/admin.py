@@ -17,6 +17,7 @@ class SupplyAdmin(admin.ModelAdmin):
     list_display = ('id', 'partner', 'partner_city', 'supplier_link', 'supplier_city', 'get_products_list', 'debt_to_supplier', 'release_datetime', 'is_active')
     readonly_fields = ('supplier_email', 'supplier_city')    #Добавляем readonly поля
     list_filter = (SupplierCityFilter, PartnerCityFilter)    #Фильтр по городу
+    actions = ['clear_debt']
 
     def supplier_link(self, obj):
         return obj.supplier.name
@@ -35,6 +36,18 @@ class SupplyAdmin(admin.ModelAdmin):
 
     def partner_city(self,obj):
         return obj.partner.city
+
+
+
+    def clear_debt(self, request, queryset):
+        # queryset - это выбранные объекты
+        for network_object in queryset:
+            network_object.debt_to_supplier = 0
+            network_object.save()
+
+        self.message_user(request, f'Задолженность перед поставщиком у выбранных объектов очищена.')
+
+    clear_debt.short_description = 'Очистить задолженность перед поставщиком'
 
     raw_id_fields = ('supplier',)
     partner_city.short_description = 'Город организации'
