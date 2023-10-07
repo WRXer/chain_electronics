@@ -21,7 +21,7 @@ class SupplyAdminForm(forms.ModelForm):
         cleaned_data = super().clean()
         supplier = cleaned_data.get('supplier')
         product = cleaned_data.get('product')
-        if supplier.node_type == 'Завод':    #Проверяем, что организация-производитель совпадает с организацией в продукте
+        if supplier.node_type == 'Завод':    #Проверяем, что организация-производитель совпадает с организацией в продукте, если тип поставщика завод
             if supplier != product.manufacturer:
                 raise forms.ValidationError(
                     "Организация-производитель в заявке должна совпадать с организацией в продукте.")
