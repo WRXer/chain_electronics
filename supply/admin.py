@@ -21,6 +21,9 @@ class SupplyAdminForm(forms.ModelForm):
         cleaned_data = super().clean()
         supplier = cleaned_data.get('supplier')
         product = cleaned_data.get('product')
+        partner = cleaned_data.get('partner')
+        if supplier == partner:
+            raise forms.ValidationError("Организация не может быть одновременно поставщиком и заказчиком.")
         if supplier.node_type == 'Завод':    #Проверяем, что организация-производитель совпадает с организацией в продукте, если тип поставщика завод
             if supplier != product.manufacturer:
                 raise forms.ValidationError(

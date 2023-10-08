@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Supply, Partner
-from .validators import SupplierValidator
+from .validators import SupplierValidator, PartnerValidator
 
 
 class SupplySerializer(serializers.ModelSerializer):
@@ -10,7 +10,8 @@ class SupplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Supply
         fields = '__all__'
-        validators = [SupplierValidator()]
+        validators = [SupplierValidator(),
+                      PartnerValidator()]
 
     def __init__(self, *args, **kwargs):
         context = kwargs.get('context', {})
